@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- including axios file in frontend -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Campus Connect-Signup</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images\favicon.png">
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+        .container-img{
+            height: 60%;
+        }
+
+        .form-container {
+            flex: 1;
+            max-width: 400px;
+            margin: 50px 150px 50px 70px;
+            padding: 45px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        input {
+            padding: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .image{
+             /* Adjusted maximum width of the image */
+             width: 60%;
+             height: 50%;
+        }
+
+        .image img{
+            width: 60%;
+            height: 160%;
+            margin: 0 0 0 100px;
+        
+        }
+
+        label {
+            font-size: 18px;
+            color: #333333;
+        }
+
+        label,
+        input {
+            font-family: Arial, sans-serif;
+            display: block;
+        }
+
+        button {
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #FF5C31;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            width: calc(100% - 20px);
+        }
+
+        button:hover {
+            background-color: rgb(240, 153, 129);
+            
+        }
+
+        input:focus {
+            outline: 2px solid #FF5C31;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #FF5C31;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .campusconnect-img {
+            position: absolute; /* Added to position the campusconnect image */
+            top: -14px; /* Adjusted top position */
+            left: 105px; /* Adjusted left position */
+            height: 225px; /* Adjusted height */
+            z-index: 999; /* Set a high z-index to ensure it appears above other content */
+        }
+
+        /* Toaster styles */
+        #toaster-container {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+
+        #toaster {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #FF5C31;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            transition: opacity 0.5s;
+        }
+
+        #toaster.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <img src="images\campusconnect.png" alt="CampusConnect" class="campusconnect-img" />
+        <div class="image">
+            <img src="images\signup.png" alt="Your Image"/>
+        </div>
+        <div class="container">
+            <div class="form-container">
+                <div class="form">
+                    <h1> SIGNUP </h1>
+                </div>
+                <form>
+                    <div id="form-body">
+                        <label for="companyName">Enter Company Name :</label>
+                        <input type="text" name="companyName" id="companyName" placeholder="XYZ COMPANY LTD."><br>
+                        <label for="code">Enter Company Code :</label>
+                        <input type="text" id="code" name="code" placeholder="Company's Code..."><br>
+                        <label for="email">Enter Company's Email :</label>
+                        <input type="text" id="email" name="email" placeholder="abc@gmail.com">
+                        <div class="btn-container">
+                            <button type="submit" class="submit-btn">SIGNUP</button>
+                            <p>Already an existing User? <a href="/login">Let's login Now</a></p>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div id="toaster-container">
+        <div id="toaster" class="hide">
+            <span id="toaster-message"></span>
+        </div>
+    </div>
+
+    <script>
+        let company = document.querySelector("#companyName");
+        let code = document.querySelector("#code");
+        let emailInput = document.querySelector("#email");
+        let btn = document.querySelector(".submit-btn");
+
+        btn.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            // signup request through axios
+            try {
+                let companyName = company.value;
+                let companyCode = code.value;
+                let email = emailInput.value;
+
+                if (companyName === '' || companyCode === '' || email === '') {
+                    showToast("Please Enter Details Carefully!!", 5000);
+                    return;
+                };
+
+                try {
+                    let response = await axios.post(`http://localhost:4000/signup`, {
+                        companyName: companyName,
+                        companyCode: companyCode,
+                        email: email,
+                    });
+
+                    console.log(response.data);
+                    const data = response.data;
+                    showToast(data.message, 5000);
+                } catch (err) {
+                    console.log(err.response.data);
+                    showToast(err.response.data.message, 5000);
+                    return;
+                }
+            } catch (err) {
+                console.log("Error in signing up");
+            }
+        });
+
+        // Function to display toaster message
+        function showToast(message, duration) {
+            const toaster = document.getElementById("toaster");
+            const toasterMessage = document.getElementById("toaster-message");
+
+            // Update toaster message content
+            toasterMessage.textContent = message;
+
+            // Show toaster
+            toaster.classList.remove("hide");
+
+            // Hide toaster after duration (in milliseconds)
+            setTimeout(() => {
+                toaster.classList.add("hide");
+            }, duration);
+        }
+    </script>
+
+</body>
+
+</html>

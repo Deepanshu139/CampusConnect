@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images\favicon.png">
+    <style>
+        body {
+            text-align: center;
+            background-color: white;
+            margin: 0;
+            padding: 0;
+            font-family: sans-serif;
+            overflow-x: hidden;
+
+            /* user cannot copy text from website*/
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            
+        }
+
+        h1 {
+            font-family:'Times New Roman', Times, serif;
+            font-size: 40px;
+            color: #FF5C31;
+            font-weight: bold;
+        }
+
+        a {
+            text-decoration: none;
+            color: #FF5C31; /* Blue color for links */
+        }
+
+        a:hover {
+            color: #FF5C31;
+        }
+
+       .navbar {
+            display: flex;
+            flex-direction: column;
+            height: 367px;
+            width: 100%;
+            position: relative;
+            background-image: linear-gradient(to right, rgba(255, 76, 5, 0.8), rgba(245, 180, 41, 0.7)), url(/images/indexImg.jpg);
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 999;
+        }
+
+        .fullnav {
+            height: 320px;
+            width: 100%; /* Full width */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            {{!-- align-content: flex-start; --}}
+        }
+
+        .navbar p {
+            color: white;
+            font-size: 48px;
+            text-align: center;
+            z-index: 999;
+            font-weight: bold;
+            font-style:oblique;
+            font-family: serif;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 21px;
+            margin: 0 10px;
+            
+        }
+
+        .navbar a:hover {
+            text-decoration: underline;
+        }
+
+        .campusconnect-whitelogo-img {
+            height: 200px; /* Adjusted height */
+            /*z-index: 999; /* Set a high z-index to ensure it appears above other content */
+            /*margin:-20px 0 0 83px;*/
+        }
+
+       .indexImg-img {
+            height: 200px; /* Adjusted height */
+             
+        }
+
+        .navImg{
+            align-self: flex-start;
+            margin-left: 7%;
+            margin-top: -20px;
+        }
+
+        .navComp{
+            align-self: flex-start;
+            margin-top: 2%;
+            font-family: serif;
+            font-weight: bolder;
+        }
+
+        .secondsec {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin-top: 50px;
+            margin-left: 150px;
+        }
+
+        .text {
+            flex: 1;
+            text-align: left; /* Align text to the right */
+            word-spacing: 3px;
+        }
+
+        .image {
+            flex: 1;
+        }
+
+        .indexsec-img {
+            height: 370px;
+            width: auto;
+             transition: transform 0.6s ease; 
+        }
+
+        .indexsec-img:hover {
+            transform: scale(1.1); /* Zoom out effect on hover */
+        }
+
+        p{
+            color: rgb(68, 67, 67);
+            font-size: 15px;
+            
+        }
+
+        .thirdsec {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin-top: 50px;
+            margin-right: -70px; /* Adjust margin to move content to the right */
+        }
+
+        .thirdimg {
+            flex: 1;
+        }
+
+        .thirdtext {
+            flex: 1;
+            text-align: left; /* Align text to the left */
+        }
+
+        .thirdimg-img {
+            height: 370px;
+            width: auto;
+             transition: transform 0.6s ease; 
+        }
+
+        .thirdimg-img:hover {
+            transform: scale(1.1); /* Zoom out effect on hover */
+        }
+
+       /* WhatsApp icon styling */
+        .whatsapp-container {
+            position: fixed;
+            bottom: 400px;
+            right: -4px;
+            background-color: #50c647; 
+            padding: 7px;
+            border-radius: 5px;
+            transition: width 0.3s ease; 
+            overflow: hidden; 
+            z-index: 999;
+        }
+
+        .whatsapp-container:hover {
+            width: auto; 
+        }
+
+        .whatsapp-content {
+            display: flex;
+            align-items: center;
+        }
+       
+        .whatsapp-icon {
+            width: 50px; 
+            height: 50px; 
+            margin-right: 6px; 
+            animation: zoomOut 2s infinite ease; 
+        }
+        @keyframes zoomOut {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1.6); }
+        }
+
+        .contact-number {
+             color: white;
+             font-size: 14px;
+             display: none; /* Initially hidden */
+        }
+
+        .whatsapp-container:hover .contact-number {
+            display: inline-block; /* Display number when container is hovered */
+         }
+         
+         /* Dial icon*/
+
+          .dial-container {
+            position: fixed;
+            bottom: 500px;
+            right: -4px;
+            background-color: #63c15c; 
+            padding: 7px;
+            border-radius: 5px;
+            transition: width 0.3s ease; 
+            overflow: hidden; 
+            z-index: 999;
+        }
+
+        .dial-container:hover {
+            width: auto; 
+        }
+
+        .dial-content {
+            display: flex;
+            align-items: center;
+        }
+       
+        .dial-icon {
+            width: 50px; 
+            height: 48px; 
+            margin-right: 6px; 
+            animation: zoomOut 2s infinite ease; 
+        }
+        @keyframes zoomOut {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.5); }
+            100% { transform: scale(1.6); }
+        }
+
+        .contact-number {
+             color: white;
+             font-size: 14px;
+             display: none; /* Initially hidden */
+        }
+
+        .dial-container:hover .contact-number {
+            display: inline-block; /* Display number when container is hovered */
+         }
+
+</style>
+</head>
+
+
+<body oncontextmenu="return false">
+<!-- Navbar -->
+
+<div class="navbar">
+    <div class="fullnav">
+        <div class="navImg">
+            <img src="images\campus connect-whitelogo.png" alt="CampusConnect" class="campusconnect-whitelogo-img" />
+            
+        </div>
+
+        <div class="navComp">
+            <a href="/addStudentPage">Add Student</a>
+            <a href="/deleteStudentPage">Delete Student</a>
+            <a href="/updateStudentPage">Update Student</a>
+            <a href="/search">Search Student</a>
+            <a href="/allStudents">All Students</a>
+            
+        </div>
+
+    </div>
+    <p>Campus Connect - A Student Management <br> Software System</p>
+   
+</div>
+
+<div class="secondsec">
+    <div class="text">
+        <h2 style="font-size: 35px;">Interested!</h2>
+        <h1>Benefits Of Student Management <br> Software...</h1>
+        <p>The school management system proposes a common automated platform <br>for the school administration, learners, tutors, and parents with salient<br>
+        benefits.It provides a cost-effective solution for campus and school<br>
+        management.The implementation of the latest communication techniques<br>
+        eases the communication process between parents, school management,<br>
+        and students. The cloud-based school management system provides<br>
+        security and safety to the information. Advanced features lay the foundation<br>
+        for new-age learning methods and can enhance the brand reputation. <br><br>
+        Campus Connect provides the complete system of student management software.It <br>
+        manages the entire campus operations administration. It provides an <br>
+        interactive platform for all stakeholder of the school like Students, Teachers, <br>
+        Parents, Administrator and Management needs in a personalized way.</p>
+    </div>
+
+    <div class="image">
+        <img src="images/indexsec.png" alt="Campus Image" class="indexsec-img" />
+    </div>
+</div>
+
+<div class="thirdsec">
+    <div class="thirdimg">
+        <img src="images/indexthird.png" alt="Campus Image" class="thirdimg-img" />
+    </div>
+    <div class="thirdtext">
+        <h1>Benefits For Management...</h1>
+        <h2>Paperless Campus, Cost-Effective Solutions</h2>
+        <p>Campus Connect - a powerful online school management software that can 
+         provide <br> several strategic advantages to your schools.</p>
+        <p style="color: black; font-size:18px; font-family:Georgia;">* &nbspComplete automation of all operations with best utilization of <br> &nbsp&nbsp&nbsp resources.</p>
+        <p style="color: black; font-size:18px; font-family:Georgia;">* &nbspMultiple campus management through single software with <br>&nbsp&nbsp&nbsp less investment in management issues.</p>
+        <p style="color: black; font-size:18px; font-family:Georgia;">* &nbspEffective communication between teachers, parents, <br>&nbsp&nbsp&nbsp management and students.</p>
+        <p style="color: black; font-size:18px; font-family:Georgia;">* &nbspIntegrated solution to manage academic, administrative and <br>&nbsp&nbsp&nbsp business processes.</p>
+        <p style="color:black; font-size:18px; font-family:Georgia;">* &nbspInstant access to the information required for decision <br>&nbsp&nbsp&nbsp making.</p>
+    </div>
+</div>
+
+ <!--  WhatsApp logo -->
+<a href="https://wa.me/919815717592" target="_blank">
+<div class="whatsapp-container">
+    <div class="whatsapp-content" style="font-weight: bold;">
+    
+        <img src="/images/whtsappicon.png" alt="WhatsApp Icon" class="whatsapp-icon" >
+        
+        <span class="contact-number" > WhatsApp <br> +91-9815717592</span>
+    </div>
+</div>
+</a>
+
+ <!--  Dial logo -->
+<a href="tel:+91-9815717592" target="_blank">
+<div class="dial-container">
+    <div class="dial-content" style="font-weight: bold;">
+    
+        <img src="/images/dialicon.png" alt="Dial Icon" class="dial-icon" >
+        
+        <span class="contact-number" > Contact <br> +91-9815717592</span>
+    </div>
+</div>
+</a>
+
+
+</body>
+<script>
+    // Disable right-click
+    document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+    });
+
+    function showContact() {
+    document.querySelector('.contact-number').style.display = 'block';
+}
+
+function hideContact() {
+    document.querySelector('.contact-number').style.display = 'none';
+}
+
+
+    // Disable inspect mode
+    {{!-- document.onkeydown = function(e) {
+        if (event.keyCode == 123) {
+            return false;
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) {
+            return false;
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'C'.charCodeAt(0)) {
+            return false;
+        }
+        if (e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) {
+            return false;
+        }
+        if (e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) {
+            return false;
+        }
+    } --}}
+</script>
+</html>

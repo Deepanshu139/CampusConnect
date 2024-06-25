@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- including axios file in frontend -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Campus Connect - New Student</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images\favicon.png">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, rgb(252, 94, 37), #f5f1ed); /* Adjust the second color stop as needed */
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        form {
+            position: absolute; /* Position the form */
+            top: 58%; /* Align the form vertically */
+            right: 124px; /* Adjusted right position */
+            transform: translateY(-50%); /* Center the form vertically */
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            max-height: 80vh; /* Set maximum height to 80% of viewport height */
+            overflow-y: auto; /* Enable vertical scroll when content exceeds height */
+        }
+
+        input {
+            padding: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 100%;
+            margin-top: 10px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 18px;
+        }
+
+        button {
+            font-size: 15px;
+            margin-top: 20px;
+            cursor: pointer;
+            background: #FF5C31;
+            color: white;
+            border: none;
+            padding: 12px 0;
+            border-radius: 5px;
+            width: 100%;
+            transition:  0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgb(240, 153, 129);
+        }
+
+        input:focus {
+            outline: 2px solid #FF5C31;
+        }
+
+        .form-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #FF5C31;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .toaster {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FF5C31;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+
+            z-index: 9999;
+        }
+
+        .campusconnect-whitelogo-img {
+            position: absolute; /* Added to position the campusconnect image */
+            top:18px; /* Adjusted top position */
+            left: 135px; /* Adjusted left position */
+            height: 205px; /* Adjusted height */
+            z-index: 999; /* Set a high z-index to ensure it appears above other content */
+        }
+
+        .student-img {
+            position: absolute; /* Position the student image */
+            bottom: 75px; /* Adjusted bottom position */
+            left: 259px; /* Adjusted left position */
+            height: 440px; /* Adjusted height */
+            transition: transform 0.6s ease; /* Smooth transition */
+        }
+
+        .student-img:hover {
+            transform: scale(1.1); /* Zoom out effect on hover */
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 11px 0;
+            z-index: 9999;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #ff5c31;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ff7e62;
+        }
+
+           .add-field-btn {
+            font-size: 20px;
+            background-color: green;
+            color: white;
+            border: none;
+            border-radius: 50%; /* Making it a circle */
+            padding: 8px; /* Smaller padding */
+            cursor: pointer;
+            width: 40px; /* Ensure consistent width and height */
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute; /* Position the button */
+            bottom: 110px; /* Adjusted top position */
+            right: 20px;
+        }
+
+        .add-field-btn:hover {
+            background-color: darkgreen;
+        }
+
+
+    </style>
+</head>
+
+<body>
+<div class="navbar">
+    <a href="/deleteStudentPage">Delete Student</a>
+    <a href="/updateStudentPage">Update Student</a>
+    <a href="/search">Search Student</a>
+    <a href="/allStudents">All Students</a>
+</div>
+<a href="/index"><img src="images\campus connect-whitelogo.png" alt="CampusConnect" class="campusconnect-whitelogo-img" /></a>
+<img src="images\student-img.png" alt="StudentImage" class="student-img" />
+
+<form>
+    <div class="form-title">Add New Student</div>
+
+    <label for="name">Enter Name:</label> <br>
+    <input type="text" name="name" id="name">
+
+    <br><br>
+
+    <label for="rollno">Enter Roll Number:</label> <br>
+    <input type="text" name="rollno" id="rollno">
+
+    <br><br>
+
+    <label for="email">Enter Email:</label> <br>
+    <input type="text" name="email" id="email"><br>
+
+    <button type="button" class="add-field-btn" onclick="addField()">
+        +
+    </button><br>
+
+    <div class="btn-container">
+        <button type="submit" class="submit-btn">Submit</button>
+        <br><br>
+        <a href="/index">Go Back To Main Page</a>
+    </div>
+</form>
+
+<script>
+    // Keep track of field names that have been added
+    let addedFields = [];
+
+    // Function to display toaster message
+    function showToast(message) {
+        const toaster = document.createElement("div");
+        toaster.classList.add("toaster");
+        toaster.textContent = message;
+        document.body.appendChild(toaster);
+        setTimeout(() => {
+            toaster.remove();
+        }, 3000); // Remove toaster message after 3 seconds
+    }
+
+    // Function to add a new field
+    function addField() {
+        const fieldName = prompt("Enter Field Name:");
+        if (fieldName && !addedFields.includes(fieldName.toLowerCase())) {
+            const form = document.querySelector("form");
+            const label = document.createElement("label");
+            label.textContent = `Enter ${fieldName}:`;
+            form.insertBefore(label, form.querySelector(".btn-container"));
+            const input = document.createElement("input");
+            input.type = "text";
+            input.name = fieldName.toLowerCase(); // Set the name attribute to lowercase
+            input.id = fieldName.toLowerCase();
+            form.insertBefore(input, form.querySelector(".btn-container"));
+            // Add the field name to the list of added fields
+            addedFields.push(fieldName.toLowerCase());
+        } else {
+            showToast("Field name already exists or empty field name entered.");
+        }
+    }
+
+    let rollInput = document.querySelector("#rollno");
+    let nameInput = document.querySelector("#name");
+    let emailInput = document.querySelector("#email");
+
+    let btn = document.querySelector(".submit-btn");
+
+    btn.addEventListener('click', async (event) => {
+        event.preventDefault();
+
+        // Get values of all inputs including the extra field
+        let name = nameInput.value;
+        let rollno = rollInput.value;
+        let email = emailInput.value;
+
+        // Check if any of the required fields are empty
+        if (!name || !rollno || !email) {
+            showToast("Please enter all the details carefully.");
+            return;
+        }
+
+        // Create an object to store the extra field data
+        let extraField = {};
+
+        // Iterate over all input fields with a name attribute and store their values in the extraField object
+        document.querySelectorAll('input[name]').forEach(input => {
+            extraField[input.name] = input.value;
+        });
+
+        // Make the POST request with all data including the extra field object
+        try {
+            let response = await axios.post(`http://localhost:4000/addStudent/`, {
+                name,
+                rollno,
+                email,
+                extraField, // Include extra field data as an object
+            });
+
+            console.log(response.data);
+            showToast(response.data.message);
+        }
+        catch (err) {
+            console.log(err.response.data);
+            showToast(err.response.data.message);
+            return;
+        }
+    });
+    
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- including axios file in frontend -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Campus Connect-Login</title>
+     <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images\favicon.png">
+
+    <style>
+        html,
+        body {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            background-repeat: no-repeat;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            position: relative; /* Added to make the position of the campusconnect image relative to the container */
+        }
+
+        .campusconnect-img {
+            position: absolute; /* Added to position the campusconnect image */
+            top: -14px; /* Adjusted top position */
+            left: 105px; /* Adjusted left position */
+            height: 225px; /* Adjusted height */
+            z-index: 999; /* Set a high z-index to ensure it appears above other content */
+        }
+
+        .image {
+            flex: 1;
+            text-align: center;
+            margin-top: 70px; /* Adjusted margin-top */
+            margin-right: 70px;
+        }
+
+        .form-container {
+            flex: 1;
+            max-width: 430px;
+            margin: 60px 130px 50px 70px; /* Adjusted margin */
+            padding: 50px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+        input {
+            padding: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        label {
+            font-size: 18px;
+            color: #333333;
+        }
+
+        label,
+        input {
+            font-family: Arial, sans-serif;
+            display: block;
+        }
+
+        button {
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            background-color: #FF5C31;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: rgb(240, 153, 129);
+        }
+
+        input:focus {
+            outline: 2px solid #FF5C31;
+        }
+
+        .btn-container {
+            margin-top: 20px;
+        }
+
+        a {
+            text-decoration: none;
+            color: #FF5C31;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        #otp-inputs input {
+            width: 40px;
+            text-align: center;
+            display: inline-block;
+            margin-right: 5px; /* Adjust spacing between input boxes */
+        }
+
+        /* Toaster styles */
+        #toaster-container {
+            position: fixed;
+            top: 40px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+        }
+
+        #toaster {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #FF5C31;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+            transition: opacity 0.5s;
+        }
+
+        #toaster.hide {
+            opacity: 0;
+            visibility: hidden;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <img src="images\campusconnect.png" alt="CampusConnect" class="campusconnect-img" />
+        <div class="image">
+            <img src="images\login-removebg.png" alt="Login Image" />
+        </div>
+        <div class="form-container">
+            <div class="form">
+                <h1> LOGIN </h1>
+            </div>
+            <form>
+                <label for="email">Enter Company's Email :</label>
+                <input type="text" name="email" id="email" placeholder="abc@gmail.com"><br>
+                <label for="code">Enter Company Code:</label>
+                <input type="password" id="code" name="code" placeholder="Company's Code...">
+
+                <div class="btn-container">
+                
+                    <button type="submit" class="submit-btn">LOGIN</button>
+                    <div id="otp-container" style="display: none;"><br>
+                        <label for="otp">Enter OTP:</label>
+                        <div id="otp-inputs">
+                            <input type="text" id="otp1" name="otp1" maxlength="1" style="width: 40px; text-align: center;">
+                            <input type="text" id="otp2" name="otp2" maxlength="1" style="width: 40px; text-align: center;">
+                            <input type="text" id="otp3" name="otp3" maxlength="1" style="width: 40px; text-align: center;">
+                            <input type="text" id="otp4" name="otp4" maxlength="1" style="width: 40px; text-align: center;">
+                            <input type="text" id="otp5" name="otp5" maxlength="1" style="width: 40px; text-align: center;">
+                            <input type="text" id="otp6" name="otp6" maxlength="1" style="width: 40px; text-align: center;">
+                        </div><br>
+                        <div id="timer">1:00</div>
+                        <button type="button" id="otp-submit-btn">Submit OTP</button> <!-- Added OTP submit button -->
+                    </div>
+                </div>
+                <p>Not an existing User? <a href="/signup">Let's signup first</a></p>
+            </form>
+        </div>
+    </div>
+
+    <div id="toaster-container">
+        <div id="toaster" class="hide">
+            <span id="toaster-message"></span>
+        </div>
+    </div>
+
+    <script>
+        // Define the startTimer function
+        function startTimer(minutes) {
+            let seconds = minutes * 60;
+            let timerDisplay = document.getElementById("timer");
+
+            let timerInterval = setInterval(() => {
+                let minutesDisplay = Math.floor(seconds / 60);
+                let secondsDisplay = seconds % 60;
+
+                // Display the timer
+                timerDisplay.textContent = `${minutesDisplay}:${secondsDisplay < 10 ? "0" : ""}${secondsDisplay}`;
+
+                if (seconds === 0) {
+                    clearInterval(timerInterval);
+                    // Handle timeout if needed
+
+                    handleTimeout();
+                } else {
+                    seconds--;
+                }
+            }, 1000);
+        }
+
+        // Function to handle timeout when the timer reaches 0
+        function handleTimeout() {
+        // Display error message when timer is over
+         showToast("Timeout! Please resend OTP.", 5000);
+    
+                // Reset the timer display to 0:00
+                document.getElementById("timer").textContent = "0:00";
+                
+                // Hide the OTP container
+                document.getElementById("otp-container").style.display = "none";
+                
+                // Reset OTP input fields if needed
+                document.querySelectorAll("#otp-inputs input").forEach(input => input.value = "");
+            }
+
+        let code = document.querySelector("#code");
+        let emailInput = document.querySelector("#email");
+        let btn = document.querySelector(".submit-btn");
+        let otpContainer = document.querySelector("#otp-container"); // Select the OTP container
+
+        btn.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            try {
+                let companyCode = code.value;
+                let email = emailInput.value;
+
+                if (companyCode == '' || email == '') {
+                    showToast("Please Enter Details Carefully !!", 5000);
+                    return;
+                };
+
+                try {
+                    let response = await axios.post(`http://localhost:4000/login/`, {
+                        companyCode: companyCode,
+                        email: email,
+                    });
+
+                    console.log(response.data);
+                    let data = response.data;
+
+                    if (data.success) {
+                        // Show OTP input fields and start timer if company code and email are correct
+                        otpContainer.style.display = "block";
+                        startTimer(1); // Start timer with initial minute set to 1
+                        showToast("OTP sent successfully!", 5000); // Added toaster message for OTP sent
+                    } else {
+                        showToast("Wrong Company Code or Email. Please try again.", 5000);
+                    }
+                } catch (err) {
+                    console.log(err.response.data);
+                    showToast(err.response.data.message, 5000);
+                    return;
+                }
+            } catch (err) {
+                console.log("Error in finding this company");
+            }
+        });
+
+        // Select the submit button for OTP verification
+        let otpSubmitBtn = document.querySelector("#otp-submit-btn");
+
+        // Add an event listener to the submit button for OTP verification
+        otpSubmitBtn.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            // Get the entered OTP from individual input fields
+            let enteredOTP = Array.from(document.querySelectorAll("#otp-inputs input"))
+                .map(input => input.value)
+                .join("");
+
+            // Verify the OTP
+            try {
+                let response = await axios.post(`http://localhost:4000/verify-otp`, {
+                    otp: enteredOTP,
+                });
+
+                console.log(response.data);
+                let data = response.data;
+
+                showToast(data.message, 5000);
+
+                if (data.success == true) {
+                    window.location.href = "http://localhost:4000/index"; // Redirect to dashboard or home page
+                }
+            } catch (err) {
+                console.log(err.response.data);
+                showToast(err.response.data.message, 5000);
+                return;
+            }
+        });
+
+        // Add event listeners to OTP input fields to move cursor to the next box on input
+        const otpInputs = document.querySelectorAll("#otp-inputs input");
+        otpInputs.forEach((input, index) => {
+            input.addEventListener("input", () => {
+                if (input.value.length === 1) {
+                    if (index < otpInputs.length - 1) {
+                        otpInputs[index + 1].focus();
+                    } else {
+                        // If it's the last input, submit OTP
+                        document.getElementById("otp-submit-btn").click();
+                    }
+                }
+            });
+
+            input.addEventListener("keydown", (event) => {
+                if (event.key === "Backspace" && input.value === "") {
+                    if (index > 0) {
+                        otpInputs[index - 1].focus();
+                    }
+                }
+            });
+        });
+
+        // Function to display toaster message
+        function showToast(message, duration) {
+            const toaster = document.getElementById("toaster");
+            const toasterMessage = document.getElementById("toaster-message");
+
+            // Update toaster message content
+            toasterMessage.textContent = message;
+
+            // Show toaster
+            toaster.classList.remove("hide");
+
+            // Hide toaster after duration (in milliseconds)
+            setTimeout(() => {
+                toaster.classList.add("hide");
+            }, duration);
+        }
+    </script>
+
+</body>
+
+</html>

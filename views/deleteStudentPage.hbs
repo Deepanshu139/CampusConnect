@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <!-- including axios file in frontend -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Campus Connect - Delete Student</title>
+     <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images\favicon.png">
+    <style>
+
+        html{
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+       #form-body {
+           position: absolute; /* Position the form */
+            top: 55%; /* Align the form vertically */
+            right: 125px; /* Adjusted right position */
+            transform: translateY(-50%); /* Center the form vertically */
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        input{
+            padding: 10px;
+            font-size: 15px;
+            box-sizing: border-box;
+            border-radius: 4px ;
+            border: 1px solid #ccc ;
+            height: 1cm ;
+            width: 100% ;
+            margin-top: 6px ;
+        }
+
+        label{
+            font-size: 18px ;
+        }
+
+        label,input{
+            font-family: sans-serif;
+        }
+        button{
+            font-size: 15px ;
+            margin-top: 3rem ;
+            cursor:pointer ;
+            background-color: #FF5C31 ;
+            color: white ;
+            border: none ;
+            padding: 12px 10rem ;
+            border-radius: 4px ;
+
+        }
+        button:hover{
+            background-color: rgb(240, 153, 129);
+        }
+
+        input:focus{
+            outline:2px solid #FF5C31;
+        }
+
+         .form-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+       
+
+        body{
+            background: linear-gradient(to right, rgb(252, 94, 37), #f5f1ed); 
+            background-repeat: no-repeat;
+             display: flex;
+        }
+
+        .btn-container{
+            margin-right: auto;
+            margin-left: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        a{
+            margin-top: 2rem;
+            text-decoration: none;
+             color: #FF5C31;
+        }
+
+        a:hover{
+            color: #FF5C31;
+            text-decoration: underline;
+        }
+        
+         .toaster {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #FF5C31;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            
+            z-index: 9999;
+        }
+
+         .campusconnect-whitelogo-img {
+            position: absolute; /* Added to position the campusconnect image */
+            top:18px; /* Adjusted top position */
+            left: 135px; /* Adjusted left position */
+            height: 205px; /* Adjusted height */
+            z-index: 999;  /* Set a high z-index to ensure it appears above other content */
+        }
+        
+          .deletestudent-img {
+            position: absolute; /* Position the student image */
+            top: 32%; /* Align the student image vertically */
+            left: 80px; /* Adjusted left position */
+            height: 380px; /* Adjusted height */
+            z-index: 999; /* Set a high z-index to ensure it appears above other content */
+            transition: transform 0.6s ease; /* Smooth transition */
+        }
+
+        .deletestudent-img:hover {
+            transform: scale(1.1); /* Zoom out effect on hover */
+        }
+
+       .navbar {
+            position: fixed;
+            top: -30px;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px 0; /* Adjusted padding */
+            z-index: 9999;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #ff5c31;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.3s ease;
+        }
+
+        .navbar a:hover {
+            color: #ff7e62;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="navbar">
+             <a href="/addStudentPage">Add Student</a>
+           
+            <a href="/updateStudentPage">Update Student</a>
+            <a href="/search">Search Student</a>
+            <a href="/allStudents">All Students</a>
+    </div>
+     <a href="/index"><img src="images\campus connect-whitelogo.png" alt="CampusConnect" class="campusconnect-whitelogo-img" /></a> 
+      <img src="images\deletestudent.png" alt="StudentImage" class="deletestudent-img" />
+<form>
+
+    
+    <div id="form-body">
+    <div class="form-title">Delete Student</div>
+
+        <label for="rollno"> Enter Roll Number : </label> <br><br>
+        <input type="text" name="rollno" id="rollno">
+    
+    
+        <div class="btn-container">
+            <button type="submit" class="submit-btn"> Submit </button>
+
+            <a href="/index"> Go Back To Main Page </a>
+        </div>
+
+    </div>
+    </form>
+
+
+    <script>
+        // Function to display toaster message
+        function showToast(message) {
+        const toaster = document.createElement("div");
+        toaster.classList.add("toaster");
+        toaster.textContent = message;
+        document.body.appendChild(toaster);
+        setTimeout(() => {
+            toaster.remove();
+        }, 3000); // Remove toaster message after 3 seconds
+    }
+
+
+        let input = document.querySelector("#rollno") ;
+
+        let btn = document.querySelector(".submit-btn") ;
+
+        btn.addEventListener('click' , async(event)=>{
+            event.preventDefault() ;
+
+            // delete request through axios
+            try{
+                let val = input.value ;
+
+                if(val == ''){
+                    showToast("Please enter roll Number") ;
+                    return ;
+                };
+
+                try{
+                    let response = await axios.delete(`http://localhost:4000/delete/${val}`);
+                    console.log(response.data) ;
+                    showToast(response.data.message) ;
+                    
+                }
+                catch(err){
+                    showToast("Not Found!!") ;
+                    return ;
+                }
+            }
+            catch(err){
+                console.log("Error in deleting the student") ;
+            }
+
+        })
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusConnect</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images\favicon.png">
+    <style>
+        /* CSS styles for layout */
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0; /* Set a background color for better visibility */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .half {
+            flex: 1; /* Make each half take up equal space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            
+        }
+
+        .image img {
+            max-width: 100%; /* Adjust image size as needed */
+            height: 450px; /* Maintain aspect ratio */
+            margin-right: 20px; /* Add margin to the right side of the image */
+            margin-top: 50px;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        
+        }
+
+        .buttons a {
+            margin: 20px; /* Adjust button margin */
+            padding: 18px 35px; /* Adjust button padding */
+            font-size: 20px; /* Adjust button font size */
+            text-decoration: none;
+            color: white; /* Set button text color to dark orange */
+            background-color: #FF5C31; /* Set button background color to transparent */
+            border: 2px solid #FF5C31; /* Add border to button */
+            border-radius: 10px; /* Adjust button border radius */
+            transition: color 0.3s; /* Add transition effect for color change */
+        }
+
+        .buttons a:hover {
+            color: #FF5C31; /* Change text color to white on hover */
+            background-color: rgb(239, 236, 233); /* Change button background color on hover */
+        }
+
+        
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Left half for the image -->
+        <div class="half">
+            <div class="image">
+                <img src="images\home.png" alt="Your Image" />
+            </div>
+        </div>
+
+        <!-- Right half for the buttons -->
+        <div class="half">
+            <div class="buttons">
+                 <img src="images\campusconnect.png" alt="Your Image" style="height: 350px;" />
+                {{!-- <div class="campus-connect">CampusConnect</div> --}}
+
+                <h1 style="margin-bottom: 50px;" >Get Started</h1>
+                <div>
+                    <a href="/login">Login</a>
+                    <a href="/signup">Signup</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
